@@ -1,0 +1,426 @@
+package com.sample
+ 
+import com.sample.Presenter;
+
+ 
+ declare Node
+ 	questionContent : String
+ 	answer : String
+ end
+ 
+
+rule "init"
+	when
+	then
+		String q = "So you've got an awesome idea for a website?";
+		String[] options = {"Sure do!",
+			 "Nope."};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "no_ideas"
+	when  
+		Node(questionContent.equals("So you've got an awesome idea for a website?")
+			&& answer.equals("Nope."))
+	then
+		Presenter.giveAnswer("No idea, no dice.");
+end
+
+rule "web_skills"
+	when
+		Node(questionContent.equals("So you've got an awesome idea for a website?")
+			&& answer.equals("Sure do!"))
+	then
+		String q = "Do you have any web-related skills?";
+		String [] options = {"Yeah totally.",
+			 "Nope.",
+			  "I know a little, dreamweaver."};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "what_can_do"
+	when
+		Node(questionContent.equals("Do you have any web-related skills?")
+				&& answer.equals("Yeah totally."))
+	then
+		String q = "What can you do?";
+		String [] options = {"I can code!", "I can design!", "I'm a social genius!"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+
+rule "hold_it"
+	when
+		Node(questionContent.equals("Sweet! You're ready to build a site!"))
+	then
+		String q = "Hold it. Just cuz ya got the skills doesn't mean ya got the chops.";
+		String [] options = {"NEXT"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "good_code"
+	when
+		Node(questionContent.equals("Hold it. Just cuz ya got the skills doesn't mean ya got the chops."))
+	then
+		String q = "What's your idea of GOOD CODE?";
+		String [] options = {"Naming variables after my pets",
+		"Copy and paste from Stack overflow",
+		"Lots and lots of nested tables",
+		"Scalable, well-commented, seamlessly integrated"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "developer"
+	when
+		Node(questionContent.equals("What's your idea of GOOD CODE?")
+		&& (answer.equals("Naming variables after my pets")
+		|| answer.equals("Copy and paste from Stack overflow")
+		|| answer.equals("Lots and lots of nested tables")))
+	then
+		Presenter.giveAnswer("Yeah. You're gonna need a developer.");
+end
+
+rule "good_design"
+	when
+		Node(questionContent.equals("What's your idea of GOOD CODE?")
+				&& answer.equals("Scalable, well-commented, seamlessly integrated"))
+	then
+		String q = "Great. What's your idea of GOOD DESIGN?";
+		String [] options = {"The more fonts, the merrier.",
+		"I dream of geocities.",
+		"Starburts and drop shadows",
+		"Clear hierarchy, beautiful, interactions thoughtful styling"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "no_photoshopr"
+	when
+		Node(questionContent.equals("Great. What's your idea of GOOD DESIGN?")
+		&& (answer.equals("The more fonts, the merrier.")
+		|| answer.equals("I dream of geocities.")
+		|| answer.equals("Starburts and drop shadows")))
+	then
+		Presenter.giveAnswer("We're not letting you anywhere near Photoshop.");
+end
+
+rule "sm_strategy"
+	when
+		Node(questionContent.equals("Great. What's your idea of GOOD DESIGN?")
+				&& answer.equals("Clear hierarchy, beautiful, interactions thoughtful styling"))
+	then
+		String q = "Great. What's your idea of GOOD SOCIAL MEDIA STRATEGY?";
+		String [] options = {"Finding and seeding brand content in appropriate channels",
+		"Building engaging conversation around your launch",
+		"Just fill every page with share buttons",
+		"Spamming followers with sponsored links",
+		"Making lots of twitter accounts to retweet myself"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "look_great"
+	when
+		Node(questionContent.equals("Great. What's your idea of GOOD SOCIAL MEDIA STRATEGY?")
+				&& (answer.equals("Finding and seeding brand content in appropriate channels")
+				|| answer.equals("Building engaging conversation around your launch")))
+	then
+		Presenter.giveAnswer("YOU LOOK GREAT! Go forth wih your website, brave one!");
+end
+
+rule "not_convinced"
+	when
+		Node(questionContent.equals("Great. What's your idea of GOOD SOCIAL MEDIA STRATEGY?")
+				&& (answer.equals("Just fill every page with share buttons")
+				|| answer.equals("Spamming followers with sponsored links")
+				|| answer.equals("Making lots of twitter accounts to retweet myself")))
+	then
+			Presenter.giveAnswer("We're not convinced you know what social media is.");
+end
+
+//koniec pierwszej ga  zi
+
+rule "learning"
+	when
+		Node(questionContent.equals("Do you have any web-related skills?")
+				&& answer.equals("Nope."))
+	then
+		String q = "Are you willing to learn?";
+		String [] options = {"Yeah totally","Nope."};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "hire"
+	when
+		Node(questionContent.equals("Are you willing to learn?")
+				&& answer.equals("Nope."))
+	then
+		String q = "Are you looking to hire someone?";
+		String [] options = {"Yes.","Nope."};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "other_skills"
+	when
+		Node(questionContent.equals("Are you looking to hire someone?")
+				&& answer.equals("Nope."))
+	then
+		String q = "Do you have any other skills?";
+		String [] options = {"Yeah I do!","Nope.","I have a lot of friends"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "no_skills"
+	when
+		Node(questionContent.equals("Do you have any other skills?")
+				&& answer.equals("Nope."))
+	then
+		Presenter.giveAnswer("What are you doing here, anyway?");
+end
+
+rule "friend_developer"
+	when
+		Node(questionContent.equals("Do you have any other skills?")
+				&& answer.equals("I have a lot of friends"))
+	then
+		String q = "Are any of them web developers?";
+		String [] options = {"Yes.","Nope."};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "tumblr"
+	when
+		Node(questionContent.equals("Are any of them web developers?")
+				&& answer.equals("Nope."))
+	then
+		String q = "Are 40 friends following your TUMBLR?";
+		String [] options = {"Yes.","Still no."};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "we_friends"
+	when
+		Node(questionContent.equals("Are 40 friends following your TUMBLR?")
+				&& answer.equals("Still no."))
+	then
+		Presenter.giveAnswer("We'll be your friend...");
+end
+
+rule "connector"
+	when
+		Node((questionContent.equals("Are any of them web developers?") ||
+		questionContent.equals("Are 40 friends following your TUMBLR?") ||
+		questionContent.equals("Are you looking to hire someone?")) && answer.equals("Yes."))	
+	then
+		Presenter.giveAnswer("YOU'RE A CONNECTOR! Time to find the right team.");
+end
+
+rule "what_skills"
+	when
+		Node(questionContent.equals("Do you have any other skills?")
+				&& answer.equals("Yeah I do!"))
+	then
+		String q = "What kinds of skills?";
+		String [] options = {"I have great ideas.","I majored in art history...","I make a wicked Martini."};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "bartender"
+	when
+		Node(questionContent.equals("What kinds of skills?")
+				&& (answer.equals("I majored in art history...") || (answer.equals("I make a wicked Martini."))))
+	then
+		Presenter.giveAnswer("WELL, THE WEB ISN'T FOR EVERYONE. You'd make a great bartender.");
+end
+
+rule "great_ideas"
+	when
+		Node(questionContent.equals("What kinds of skills?")
+				&& answer.equals("I have great ideas."))
+	then
+		System.out.println("Powr t do pocz tku.");
+		for (Object fact : drools.getWorkingMemory().getObjects()) {
+            drools.getWorkingMemory().retract(drools.getFactHandle(fact));
+        }
+
+        String q = "So you've got an awesome idea for a website?";
+		String[] options = {"Sure do!","Nope."};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+		
+end
+
+//3 branch
+
+
+rule "whats_plan"
+	when
+		Node(questionContent.equals("Are you willing to learn?")
+				&& answer.equals("Yeah totally"))
+	then
+		String q = "So what's your plan?";
+		String [] options = {"Gonna fake it till i make it!","Get another degree", "Dive in and learn something new"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "extreme_lucky"
+	when
+		Node(questionContent.equals("So what's your plan?")
+				&& answer.equals("Gonna fake it till i make it!"))
+	then
+		String q = "Are you extremely lucky?";
+		String [] options = {"Yes.", "Nope"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "extreme_wealthy"
+	when
+		Node(questionContent.equals("Are you extremely lucky?")
+				&& answer.equals("Nope"))
+	then
+		String q = "Are you extremely wealthy?";
+		String [] options = {"Yes.", "Nope"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "extreme_good-looking"
+	when
+		Node(questionContent.equals("Are you extremely wealthy?")
+				&& answer.equals("Nope"))
+	then
+		String q = "Are you extremely good-looking?";
+		String [] options = {"Yes.", "Nope"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "gonna_be_huge"
+	when
+		Node((questionContent.equals("Are you extremely lucky?") || questionContent.equals("Are you extremely wealthy?") || questionContent.equals("Are you extremely good-looking?"))
+				&& answer.equals("Yes."))
+	then
+		Presenter.giveAnswer("You're gonna be huge. Time to hire some people");
+end
+
+rule "plastic_surgeon"
+	when
+		Node(questionContent.equals("Are you extremely good-looking?")
+				&& answer.equals("Nope"))
+	then
+		Presenter.giveAnswer("Let me get you the number for my plastic surgeon");
+end
+
+rule "grad_school"
+	when
+		Node(questionContent.equals("So what's your plan?")
+				&& answer.equals("Get another degree"))
+	then
+		String q = "Do you have $80k to blow on grad school?";
+		String [] options = {"You know it", "Not quite"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "community_college"
+	when
+		Node(questionContent.equals("Do you have $80k to blow on grad school?")
+				&& answer.equals("Not quite"))
+	then
+		String q = "Do you have $30k to blow on community college?";
+		String [] options = {"Yeah totally. Cha-ching", "Still no"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "ed_certificate"
+	when
+		Node(questionContent.equals("Do you have $30k to blow on community college?")
+				&& answer.equals("Still no"))
+	then
+		String q = "Do you have $8k to blow on continuing ed cerificate?";
+		String [] options = {"That, I can handle", "I live with mom"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "rich_uncle"
+	when
+		Node(questionContent.equals("Do you have $8k to blow on continuing ed cerificate?")
+				&& answer.equals("I live with mom"))
+	then
+		Presenter.giveAnswer("Find your rich uncle. Tell him he's always been your favorite.");
+end
+
+rule "couple_years"
+	when
+		Node((questionContent.equals("Do you have $8k to blow on continuing ed cerificate?")
+				&& answer.equals("That, I can handle")) || (questionContent.equals("Do you have $30k to blow on community college?")
+				&& answer.equals("Yeah totally. Cha-ching")) ||(questionContent.equals("Do you have $80k to blow on grad school?")
+				&& answer.equals("You know it")))
+	then
+		Presenter.giveAnswer("See you in a couple years! Hopefully the Internet still exists.");
+end
+
+rule "learn_dev"
+	when
+		Node(questionContent.equals("So what's your plan?")
+				&& answer.equals("Dive in and learn something new"))
+	then
+		String q = "Learn web development";
+		String [] options = {"I know ASP.NET", "I learn Ruby on Rails"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "learn_design"
+	when
+		Node(questionContent.equals("So what's your plan?")
+				&& answer.equals("Dive in and learn something new"))
+	then
+		String q = "Learn web design";
+		String [] options = {"Microsoft front page", "Learn photoshop & CSS"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "learn_strategy"
+	when
+		Node(questionContent.equals("So what's your plan?")
+				&& answer.equals("Dive in and learn something new"))
+	then
+		String q = "Learn social strategy";
+		String [] options = {"I have 47 friends on myspace", "Get mentioned on mashable"};
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+rule "old_school"
+	when  
+		Node((questionContent.equals("Do you have any web-related skills?")
+			&& answer.equals("I know a little, dreamweaver.")) || (questionContent.equals("Learn social strategy")
+			&& answer.equals("I have 47 friends on myspace")) || (questionContent.equals("Learn web design")
+			&& answer.equals("Microsoft front page")) || (questionContent.equals("Learn web development")
+			&& answer.equals("I know ASP.NET")))
+	then
+		Presenter.giveAnswer("Whoa old school! Sounds like it's time to update.");
+end
+
+
+rule "Sweet"
+	when
+		Node((questionContent.equals("What can you do?")) || (questionContent.equals("Learn social strategy")
+			&& answer.equals("Get mentioned on mashable")) || (questionContent.equals("Learn web design")
+			&& answer.equals("Learn photoshop & CSS")) || (questionContent.equals("Learn web development")
+			&& answer.equals("I learn Ruby on Rails")))
+	then
+		String [] options = {"NEXT"};
+		String q = "Sweet! You're ready to build a site!";
+		insert(new Node(q, Presenter.askQuestion(q, options)));
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
